@@ -5,6 +5,8 @@ class ApplicationController < ActionController::API
 
   rescue_from JWT::VerificationError, with: :missing_invalid_token
   rescue_from JWT::DecodeError, with: :missing_invalid_token
+  rescue_from ActionController::ParameterMissing, with: :handle_missing_param
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_data_not_found
 
   private
 
@@ -18,5 +20,13 @@ class ApplicationController < ActionController::API
 
   def missing_invalid_token
     render_error("Missing or invalid token", :unauthorized)
+  end
+
+  def handle_missing_param(exception)
+    render_error(exception.message, :bad_request)
+  end
+
+  def handle_data_not_found(exception)
+    render_error(exception.message, :not_found)
   end
 end

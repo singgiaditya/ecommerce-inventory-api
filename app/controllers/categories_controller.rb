@@ -29,28 +29,26 @@ class CategoriesController < ApplicationController
     if @category.update(category_params)
       render_success("Category updated successfully", { category: @category })
     else
-      render_error(@category.errors.full_message)
+      render_error(@category.errors.full_messages)
     end
   end
 
   # DELETE /categories/1
   def destroy
     @category.destroy!
-    render_success("Category deleted successfully")
+    render_success("Category deleted successfully", {})
   rescue ActiveRecord::RecordNotDestroyed => e
-    render_error(e.record.errors.full_messages, "Failed to delete category")
+    render_error(e.record.errors.full_messages)
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_category
       @category = Category.find(params.expect(:id))
-    rescue ActivateRecord::RecordNotFound
-      render_error("Category not found", :not_found)
     end
 
     # Only allow a list of trusted parameters through.
     def category_params
-      params.permit(:name)
+      params.require(:category).permit(:name)
     end
 end
