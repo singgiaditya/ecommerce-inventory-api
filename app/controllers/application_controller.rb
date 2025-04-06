@@ -17,6 +17,6 @@ class ApplicationController < ActionController::API
   end
 
   def missing_invalid_token
-    render_error(nil, "Missing or invalid token", :unauthorized)
+    render_error("Missing or invalid token", :unauthorized)
   end
 end

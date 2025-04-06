@@ -3,7 +3,7 @@ class AuthenticationController < ApplicationController
 
   def login
     if params[:email].blank? || params[:password].blank?
-      return render_error("Email and password cannot be blank", nil)
+      return render_error("Email and password cannot be blank")
     end
 
     user = User.find_by(email: params[:email])
@@ -12,9 +12,9 @@ class AuthenticationController < ApplicationController
     if authenticated_user
       token = JsonWebToken.encode(user_id: user.id)
 
-      render_success({ token: }, :ok)
+      render_success("User Logged in successfully", { token: })
     else
-      render_error(nil, "Invalid email or password", :unauthorized)
+      render_error("Invalid email or password", :unauthorized)
     end
   end
 end
