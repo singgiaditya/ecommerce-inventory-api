@@ -18,4 +18,6 @@ Rails.application.routes.draw do
     get "search", on: :collection
   end
   get "/inventory/value", to: "products#inventory_value"
+  resources :promotions
+  resources :product_promotions
 end
