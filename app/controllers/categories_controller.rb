@@ -3,9 +3,13 @@ class CategoriesController < ApplicationController
 
   # GET /categories
   def index
-    @categories = Category.all
+    @pagy, @categories = paginate(Category.all)
 
-    render_success("Data found", { categories: @categories  })
+    render_success("Data found",{
+      **pagy_metadata(@pagy),
+      categories: @categories
+    })
+
   end
 
   # GET /categories/1

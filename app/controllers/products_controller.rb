@@ -3,9 +3,12 @@ class ProductsController < ApplicationController
 
   # GET /products
   def index
-    @products = Product.all
+    @pagy, @products = paginate(Product.includes(:category))
 
-    render_success("Data found", { products: @products  })
+    render_success("Data found",{
+      **pagy_metadata(@pagy),
+      products: @products
+    })
   end
 
   # GET /products/1
@@ -72,12 +75,16 @@ class ProductsController < ApplicationController
       return render_error("Invalid category_id: not found", :unprocessable_entity)
     end
 
-    @products = Product
+    @pagy, @products = paginate(Product
     .search_by_name(search_params[:name])
-    .filter_by_category(search_params[:category_id])
+    .filter_by_category(search_params[:category_id]))
+
 
     if @products.exists?
-      render_success("Search result found", { products: @products })
+      render_success("Search result found",{
+      **pagy_metadata(@pagy),
+      products: @products
+    })
     else
       render_error("No products match the search criteria", :not_found)
     end

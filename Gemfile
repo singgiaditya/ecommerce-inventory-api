@@ -47,3 +47,5 @@ group :development, :test do
 end
 
 gem "jwt", "~> 2.10"
+
+gem "pagy", "~> 9.3"
